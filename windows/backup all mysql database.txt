@@ -1,5 +1,10 @@
 @echo off
 
+
+rem Get current date in YYYY-MM-DD format
+for /f "tokens=1-3 delims=/" %%a in ('date /t') do (set "YYYY=%%c" & set "MM=%%a" & set "DD=%%b")
+set "current_date=%YYYY%-%MM%-%DD%"
+
 rem Set MySQL credentials
 set MYSQL_USER=your_username
 set MYSQL_PASSWORD=your_password
@@ -7,5 +12,5 @@ set MYSQL_PASSWORD=your_password
 rem Get list of databases
 for /f "tokens=*" %%A in ('mysql -u%MYSQL_USER% -p%MYSQL_PASSWORD% -e "SHOW DATABASES;" ^| findstr /r /v "^Database$ ^information_schema$ ^performance_schema$"') do (
     rem Export each database to a separate file
-    mysqldump -u%MYSQL_USER% -p%MYSQL_PASSWORD% --databases "%%A" > "%%A.sql"
+    mysqldump -u%MYSQL_USER% -p%MYSQL_PASSWORD% --databases "%%A" > "%%A_%current_date%.sql"
 )
