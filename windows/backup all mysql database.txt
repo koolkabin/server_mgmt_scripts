@@ -1,0 +1,11 @@
+@echo off
+
+rem Set MySQL credentials
+set MYSQL_USER=your_username
+set MYSQL_PASSWORD=your_password
+
+rem Get list of databases
+for /f "tokens=*" %%A in ('mysql -u%MYSQL_USER% -p%MYSQL_PASSWORD% -e "SHOW DATABASES;" ^| findstr /r /v "^Database$ ^information_schema$ ^performance_schema$"') do (
+    rem Export each database to a separate file
+    mysqldump -u%MYSQL_USER% -p%MYSQL_PASSWORD% --databases "%%A" > "%%A.sql"
+)

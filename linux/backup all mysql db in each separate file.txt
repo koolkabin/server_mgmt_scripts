@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Set MySQL credentials
+MYSQL_USER="your_username"
+MYSQL_PASSWORD="your_password"
+
+# Get list of databases
+DATABASES=$(mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema)")
+
+# Loop through each database and export to separate file
+for DB in $DATABASES; do
+    mysqldump -u$MYSQL_USER -p$MYSQL_PASSWORD --databases $DB > "$DB.sql"
+done
